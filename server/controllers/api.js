@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
 var Todo = require('../models/todo');
-var ObjectId = require("mongoose").Types.ObjectId;
 
 // list all todos
 router.get('/', function (req, res) {
@@ -22,18 +21,15 @@ router.post('/', function (req, res){
 
 // delete todo
 router.delete('/:id', function (req, res){
-  console.log(req.params.id);
-  Todo.findById(req.params.id)
-    .remove()
-    .exec(function (err, num_removed, status){
+  Todo.remove({_id:req.params.id}, function (err, num_removed, result){
     if (err) throw err;
-    res.json( status ); //this is the todo that was removed
+    res.json( result ); //this is the todo that was removed
   });
 });
 
 // complete todo
 router.put('/:id/complete', function (req, res){
-  Todo.update({ _id : ObjectId(req.params.id)}, 
+  Todo.update(req.params.id, 
     { 
       $set : {
         completed : true

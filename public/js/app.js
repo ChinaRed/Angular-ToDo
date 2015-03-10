@@ -2,10 +2,13 @@ angular
   // dependencies ---v
   .module('TodoApp', [])
 
-  // dependency injection----------v-----------------v
-  .controller('TodoController', ["$scope", function($scope){
+  // dependency injection----------v-----------------v-------------v
+  .controller('TodoController', ["$scope", "TodoService", function($scope, TodoService){
 
-    $scope.todos = [];
+    // TodoService.list() returns a promise
+    TodoService.list().then(function (todos){
+      $scope.todos = todos.data;
+    });
 
     $scope.save_todo = function( new_title ){
       $scope.todos.push({
